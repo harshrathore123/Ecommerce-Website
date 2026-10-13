@@ -1,30 +1,41 @@
 package com.orderservice.service;
 
+import com.orderservice.client.ProductClient;
+import com.orderservice.client.UserClient;
 import com.orderservice.dto.OrderRequest;
+import com.orderservice.dto.ProductResponse;
+import com.orderservice.dto.UserResponse;
 import com.orderservice.entity.Order;
 import com.orderservice.exception.OrderNotFoundException;
 import com.orderservice.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
 
     public final OrderRepository orderRepository;
+    public final UserClient userClient;
+    public final ProductClient productClient;
 
-    public OrderService(OrderRepository orderRepository){
+    public OrderService(OrderRepository orderRepository, UserClient userClient, ProductClient productClient){
         this.orderRepository = orderRepository;
+        this.userClient = userClient;
+        this.productClient = productClient;
     }
 
     // Todo:Perform Rest API
     // Todo: Create Order
     public Order createOrder(OrderRequest orderRequest){
+
+        UserResponse user = this.userClient.getUserById(orderRequest.getUserId());
+        ProductResponse product = this.productClient.getProductById(orderRequest.getProductId());
+
         Order order = new Order();
 
-        order.setUserId(orderRequest.getUserId());
-        order.setProductId(orderRequest.getProductId());
+        order.setUserId(user.getId());
+        order.setProductId(product.getId());
         order.setQuantity(orderRequest.getQuantity());
         order.setStatus(orderRequest.getStatus());
         order.setTotalPrice(orderRequest.getTotalPrice());

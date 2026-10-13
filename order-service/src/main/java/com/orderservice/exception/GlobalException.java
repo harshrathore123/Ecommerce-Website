@@ -1,5 +1,6 @@
 package com.orderservice.exception;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -24,6 +25,26 @@ public class GlobalException {
         );
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> productNotFoundHanlder(
+            ProductNotFoundException exception
+    ){
+        return new ResponseEntity<>(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> userNotFoundHanlder(
+            UserNotFoundException exception
+    ){
+        return new ResponseEntity<>(
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
 //    Validation Exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String,String>> handleValidationException(
@@ -35,6 +56,17 @@ public class GlobalException {
         }
 
         return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+    }
+
+//    Fiegn Exception
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<String> handleFeignException(
+            FeignException exception
+    ){
+        return new ResponseEntity<>(
+                exception.getMessage(),
+                HttpStatus.valueOf(exception.status())
+        );
     }
 
 }
