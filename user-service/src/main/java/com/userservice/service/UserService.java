@@ -1,6 +1,7 @@
 package com.userservice.service;
 
 import com.userservice.dto.UserRequest;
+import com.userservice.dto.UserResponse;
 import com.userservice.entity.User;
 import com.userservice.exception.UserNotFoundException;
 import com.userservice.repository.UserRepository;
@@ -13,44 +14,58 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private UserResponse mapToResponse(User user){
+        UserResponse userResponse = new UserResponse();
+
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setEmail(user.getEmail());
+
+        return userResponse;
+    }
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserRequest userRequest) {
         User user = new User();
 
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
         user.setPassword(userRequest.getPassword());
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return mapToResponse(savedUser);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<User> all = userRepository.findAll();
+        return all.stream().map(u->new UserResponse(u.getId(),u.getName(),u.getEmail())).toList();
     }
 
-    public User getUserById(Long id) {
+    public UserResponse getUserById(Long id) {
 
-        return userRepository.findById(id)
+        return mapToResponse(userRepository.findById(id)
                 .orElseThrow(()->
                         new UserNotFoundException("User not found with id:  "+id)
-                );
+                ));
+
     }
 
-    public User updateUser(Long id, User user) {
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserNotFoundException("User not found with id: " + id)
                 );
 
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
+        existingUser.setName(userRequest.getName());
+        existingUser.setEmail(userRequest.getEmail());
+        existingUser.setPassword(userRequest.getPassword());
 
-        return userRepository.save(existingUser);
+        User updatedUser = userRepository.save(existingUser);
+        return mapToResponse(updatedUser);
     }
 
     public void deleteUser(Long id) {

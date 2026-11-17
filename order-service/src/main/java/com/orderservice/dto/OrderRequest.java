@@ -1,5 +1,6 @@
 package com.orderservice.dto;
 
+import com.orderservice.entity.OrderStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,5 +25,8 @@ public class OrderRequest {
     private Double totalPrice;
 
     @NotNull(message = "Status is required")
-    private String status;
+    private OrderStatus status;
+
+    @NotNull(message = "Customer Id is required")
+    private Long customerId;
 }

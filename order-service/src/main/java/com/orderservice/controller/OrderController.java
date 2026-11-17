@@ -1,6 +1,7 @@
 package com.orderservice.controller;
 
 import com.orderservice.dto.OrderRequest;
+import com.orderservice.dto.OrderResponse;
 import com.orderservice.entity.Order;
 import com.orderservice.service.OrderService;
 import jakarta.validation.Valid;
@@ -23,22 +24,22 @@ public class OrderController {
     // Todo: Handler for Crud Operation
     // Todo: Creating Handler for Create Order
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@Valid @RequestBody OrderRequest orderRequest){
-        Order order = this.orderService.createOrder(orderRequest);
+    public ResponseEntity<OrderResponse> createOrder(@Valid @RequestBody OrderRequest orderRequest){
+        OrderResponse order = this.orderService.createOrder(orderRequest);
         return new ResponseEntity<>(order,HttpStatus.CREATED);
     }
 
     // Todo: Reading Handler for Read Order
     @GetMapping("/read/{id}")
-    public ResponseEntity<Order> readOrder(@PathVariable Long id){
-        Order order = this.orderService.getOrderById(id);
+    public ResponseEntity<OrderResponse> readOrder(@PathVariable Long id){
+        OrderResponse order = this.orderService.getOrderById(id);
         return new ResponseEntity<>(order,HttpStatus.OK);
     }
 
     // Todo: Reading Hanlder for Read All Order
     @GetMapping("/read")
-    public ResponseEntity<List<Order>> readAllOrder(){
-        List<Order> order = this.orderService.getOrderAll();
+    public ResponseEntity<List<OrderResponse>> readAllOrder(){
+        List<OrderResponse> order = this.orderService.getOrderAll();
         return new ResponseEntity<>(order,HttpStatus.OK);
     }
 
@@ -58,8 +59,8 @@ public class OrderController {
 
     // Todo: Update Handler for Update Order
     @PutMapping("/update/{id}")
-    public ResponseEntity<Order> updateOrder(@Valid @RequestBody OrderRequest orderRequest,@PathVariable Long id){
-        Order order = this.orderService.updateOrder(orderRequest,id);
+    public ResponseEntity<OrderResponse> updateOrder(@Valid @RequestBody OrderRequest orderRequest,@PathVariable Long id){
+        OrderResponse order = this.orderService.updateOrder(orderRequest,id);
         return new ResponseEntity<>(order,HttpStatus.OK);
     }
 }

@@ -1,6 +1,7 @@
 package com.productservice.controller;
 
 import com.productservice.dto.ProductRequest;
+import com.productservice.dto.ProductResponse;
 import com.productservice.entity.Product;
 import com.productservice.service.ProductService;
 import jakarta.validation.Valid;
@@ -19,22 +20,22 @@ public class ProductController {
 
     // Creating the product
     @PostMapping("/create")
-    public ResponseEntity<Product> addProduct(@Valid @RequestBody ProductRequest productRequest){
-        Product product = this.productService.addProduct(productRequest);
+    public ResponseEntity<ProductResponse> addProduct(@Valid @RequestBody ProductRequest productRequest){
+        ProductResponse product = this.productService.addProduct(productRequest);
         return new ResponseEntity<>(product,HttpStatus.CREATED);
     }
 
     // Read the product
     @GetMapping("/read/{id}")
-    public ResponseEntity<Product> readProduct(@PathVariable Long id){
-        Product product = this.productService.getProduct(id);
+    public ResponseEntity<ProductResponse> readProduct(@PathVariable Long id){
+        ProductResponse product = this.productService.getProduct(id);
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
 
     // Read all the product
     @GetMapping("/read")
-    public ResponseEntity<List<Product>> readAllProduct(){
-        List<Product> product = this.productService.getAllProduct();
+    public ResponseEntity<List<ProductResponse>> readAllProduct(){
+        List<ProductResponse> product = this.productService.getAllProduct();
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
 
@@ -47,11 +48,11 @@ public class ProductController {
 
     // Update the product
     @PutMapping("/update/{id}")
-    public ResponseEntity<Product> updateProduct(
+    public ResponseEntity<ProductResponse> updateProduct(
             @PathVariable Long id,
             @Valid @RequestBody ProductRequest productRequest) {
 
-        Product productData = productService.updateProduct(id, productRequest);
+        ProductResponse productData = productService.updateProduct(id, productRequest);
 
         return new ResponseEntity<>(productData, HttpStatus.OK);
     }

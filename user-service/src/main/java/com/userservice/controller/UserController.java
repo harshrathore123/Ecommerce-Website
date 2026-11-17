@@ -1,6 +1,7 @@
 package com.userservice.controller;
 
 import com.userservice.dto.UserRequest;
+import com.userservice.dto.UserResponse;
 import com.userservice.entity.User;
 import com.userservice.service.UserService;
 import jakarta.validation.Valid;
@@ -21,35 +22,35 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
 
-        User savedUser = userService.createUser(userRequest);
+        UserResponse savedUser = userService.createUser(userRequest);
 
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
 
-        List<User> users = userService.getAllUsers();
+        List<UserResponse> users = userService.getAllUsers();
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
-        User user = userService.getUserById(id);
+        UserResponse userResponse = userService.getUserById(id);
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long id,
-            @RequestBody User user) {
+            @RequestBody UserRequest userRequest) {
 
-        User updatedUser = userService.updateUser(id, user);
+        UserResponse updatedUser = userService.updateUser(id, userRequest);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
