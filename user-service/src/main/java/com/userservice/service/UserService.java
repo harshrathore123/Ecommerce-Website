@@ -33,7 +33,6 @@ public class UserService {
 
         user.setName(userRequest.getName());
         user.setEmail(userRequest.getEmail());
-        user.setPassword(userRequest.getPassword());
 
         User savedUser = userRepository.save(user);
         return mapToResponse(savedUser);
@@ -62,7 +61,6 @@ public class UserService {
 
         existingUser.setName(userRequest.getName());
         existingUser.setEmail(userRequest.getEmail());
-        existingUser.setPassword(userRequest.getPassword());
 
         User updatedUser = userRepository.save(existingUser);
         return mapToResponse(updatedUser);
