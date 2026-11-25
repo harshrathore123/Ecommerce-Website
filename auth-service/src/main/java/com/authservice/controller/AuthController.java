@@ -1,7 +1,10 @@
     package com.authservice.controller;
 
+    import com.authservice.dto.LoginRequest;
+    import com.authservice.dto.LoginResponse;
     import com.authservice.dto.RegisterRequest;
     import com.authservice.dto.UserResponse;
+    import com.authservice.entity.AuthUser;
     import com.authservice.service.AuthService;
     import jakarta.validation.Valid;
     import org.springframework.http.HttpStatus;
@@ -38,5 +41,11 @@
             UserResponse user = authService.registerUser(registerRequest);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        }
+
+        @PostMapping("/login")
+        public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest){
+            LoginResponse user = authService.loginUser(loginRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }

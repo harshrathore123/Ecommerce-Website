@@ -1,11 +1,10 @@
 package com.authservice.service;
 
 import com.authservice.client.UserServiceClient;
-import com.authservice.dto.RegisterRequest;
-import com.authservice.dto.UserRequest;
-import com.authservice.dto.UserResponse;
+import com.authservice.dto.*;
 import com.authservice.entity.AuthUser;
 import com.authservice.exception.EmailAlreadyExistsException;
+import com.authservice.exception.InvalidCredentialsException;
 import com.authservice.repository.AuthUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,24 @@ public class AuthService {
         return userData;
     }
 
+    public LoginResponse loginUser(LoginRequest loginRequest){
+        AuthUser authUser = authUserRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() ->
+                        new InvalidCredentialsException("Invalid email or password")
+                );
+        String password = loginRequest.getPassword();
 
+        if (!passwordEncoder.matches(password, authUser.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setId(authUser.getId());
+        loginResponse.setUserId(authUser.getUserId());
+        loginResponse.setEmail(authUser.getEmail());
+
+        return loginResponse;
+    }
 
 
 }
