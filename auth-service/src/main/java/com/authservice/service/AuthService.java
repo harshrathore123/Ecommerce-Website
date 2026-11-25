@@ -5,6 +5,7 @@ import com.authservice.dto.RegisterRequest;
 import com.authservice.dto.UserRequest;
 import com.authservice.dto.UserResponse;
 import com.authservice.entity.AuthUser;
+import com.authservice.exception.EmailAlreadyExistsException;
 import com.authservice.repository.AuthUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ public class AuthService {
     public final AuthUserRepository authUserRepository;
     public final PasswordEncoder passwordEncoder;
 
+
     public AuthService(UserServiceClient userServiceClient, AuthUserRepository authUserRepository, PasswordEncoder passwordEncoder) {
         this.userServiceClient = userServiceClient;
         this.authUserRepository = authUserRepository;
@@ -24,7 +26,7 @@ public class AuthService {
 
     public UserResponse registerUser(RegisterRequest registerRequest){
         if(authUserRepository.findByEmail(registerRequest.getEmail()).isPresent()){
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         UserRequest userRequest = new UserRequest();
@@ -41,6 +43,8 @@ public class AuthService {
         authUserRepository.save(authUser);
         return userData;
     }
+
+
 
 
 }
