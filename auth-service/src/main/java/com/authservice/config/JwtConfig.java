@@ -17,9 +17,7 @@ import java.util.Base64;
 public class JwtConfig {
 
     @Bean
-    public SecretKey jwtSecretKey(
-            @Value("${jwt.secret}") String secret
-    ){
+    public SecretKey jwtSecretKey(@Value("${jwt.secret}") String secret){
         byte[] keyBytes = Base64.getDecoder().decode(secret);
         return new SecretKeySpec(keyBytes,"HmacSHA256");
     }
